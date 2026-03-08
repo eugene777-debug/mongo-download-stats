@@ -29,14 +29,20 @@ def compute_yoy(df):
         this_start = df.loc[i, "week_start"]
 
         last_year_start = this_start - timedelta(days=365)
-        match = df[df["week_start"] == last_year_start]
 
-        if len(match) == 1:
-            last_year = match["downloads"].values[0]
+        # Match nearest week within ±3 days
+        match = df[
+            (df["week_start"] >= last_year_start - pd.Timedelta(days=3)) &
+            (df["week_start"] <= last_year_start + pd.Timedelta(days=3))
+        ]
+
+        if len(match) >= 1:
+            last_year = match.iloc[0]["downloads"]
             if last_year > 0:
                 df.loc[i, "yoy"] = (this_week - last_year) / last_year * 100
 
     return df
+
 
 def main():
     df = fetch_npm_history()
