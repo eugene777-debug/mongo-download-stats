@@ -14,10 +14,14 @@ def fetch_npm_history():
     df = df.sort_values("day")
 
     # Convert daily → weekly
-   df = df.set_index("day").resample("W-SUN")["downloads"].sum().reset_index()
-df["week_start"] = df["day"] - pd.to_timedelta(6, unit="d")
-df["week_end"] = df["day"]
+    df = df.set_index("day").resample("W-SUN")["downloads"].sum().reset_index()
 
+    # Drop the first partial week created by resampling
+    df = df.iloc[1:]
+
+    # Compute week boundaries
+    df["week_start"] = df["day"] - pd.to_timedelta(6, unit="d")
+    df["week_end"] = df["day"]
 
     return df[["week_start", "week_end", "downloads"]]
 
@@ -43,7 +47,6 @@ def compute_yoy(df):
                 df.loc[i, "yoy"] = (this_week - last_year) / last_year * 100
 
     return df
-
 
 def main():
     df = fetch_npm_history()
