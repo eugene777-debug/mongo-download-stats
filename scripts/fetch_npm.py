@@ -15,6 +15,7 @@ def fetch_npm_history():
 
     # Convert daily → weekly
     df = df.set_index("day").resample("W-SUN")["downloads"].sum().reset_index()
+    df = df.iloc[1:]   
     df["week_start"] = df["day"] - pd.to_timedelta(6, unit="d")
     df["week_end"] = df["day"]
 
