@@ -14,10 +14,10 @@ def fetch_npm_history():
     df = df.sort_values("day")
 
     # Convert daily → weekly
-    df = df.set_index("day").resample("W-SUN")["downloads"].sum().reset_index()
-    df = df.iloc[1:]   
-    df["week_start"] = df["day"] - pd.to_timedelta(6, unit="d")
-    df["week_end"] = df["day"]
+   df = df.set_index("day").resample("W-SUN")["downloads"].sum().reset_index()
+df["week_start"] = df["day"] - pd.to_timedelta(6, unit="d")
+df["week_end"] = df["day"]
+
 
     return df[["week_start", "week_end", "downloads"]]
 
