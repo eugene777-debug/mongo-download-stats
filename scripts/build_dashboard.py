@@ -51,6 +51,7 @@ def main():
         f.write(make_chart(pymongo, "pymongo Weekly Downloads"))
 
         f.write("<h2>mongodb Weekly Downloads</h2>")
+        mongodb = mongodb.iloc[1:]
         f.write(make_chart(mongodb, "mongodb Weekly Downloads"))
 
         f.write("<h2>pymongo YoY Growth</h2>")
