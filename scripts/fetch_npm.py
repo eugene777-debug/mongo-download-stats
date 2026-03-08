@@ -17,7 +17,7 @@ def fetch_npm_history():
     df = df.set_index("day").resample("W-SUN")["downloads"].sum().reset_index()
 
     # Drop the first partial week created by resampling
-    df = df.iloc[1:]
+    df = df.iloc[1:].reset_index(drop=True)
 
     # Compute week boundaries
     df["week_start"] = df["day"] - pd.to_timedelta(6, unit="d")
