@@ -18,6 +18,13 @@ def make_chart(df, title):
     return fig.to_html(full_html=False)
 
 def make_yoy_chart(df, title):
+    df = df.copy()
+
+    # Keep only the last 3 years of data
+    if "week_start" in df.columns:
+        cutoff = df["week_start"].max() - pd.DateOffset(years=3)
+        df = df[df["week_start"] >= cutoff]
+
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=df["week_start"],
@@ -25,8 +32,13 @@ def make_yoy_chart(df, title):
         mode="lines",
         name=title
     ))
-    fig.update_layout(title=f"{title} YoY % Growth", xaxis_title="Week", yaxis_title="YoY %")
+    fig.update_layout(
+        title=f"{title} YoY % Growth",
+        xaxis_title="Week",
+        yaxis_title="YoY %"
+    )
     return fig.to_html(full_html=False)
+
 
 def main():
     pymongo, mongodb = load_data()
