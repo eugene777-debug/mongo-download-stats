@@ -46,6 +46,8 @@ def compute_yoy(df):
             if last_year > 0:
                 df.loc[i, "yoy"] = (this_week - last_year) / last_year * 100
 
+    df = df.iloc[1:].reset_index(drop=True)
+
     return df
 
 def main():
